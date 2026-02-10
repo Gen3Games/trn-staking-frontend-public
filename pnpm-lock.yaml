@@ -7,6 +7,7 @@ settings:
 overrides:
   '@emotion/react': 11.11.1
   '@emotion/styled': 11.10.8
+  '@futureverse/signer': 1.8.0
 
 dependencies:
   '@apollo/client':
@@ -3584,7 +3585,7 @@ packages:
     peerDependencies:
       viem: 2.x
     dependencies:
-      '@futureverse/signer': 1.5.0(typescript@5.9.3)(zod@3.25.76)
+      '@futureverse/signer': 1.8.0(typescript@5.9.3)(zod@3.25.76)
       cookie-storage: 6.1.0
       jwt-decode: 4.0.0
       oidc-client-ts: 3.4.1
@@ -3610,17 +3611,6 @@ packages:
       - supports-color
     dev: false
 
-  /@futureverse/signer-core@0.1.1:
-    resolution: {integrity: sha512-L+rXMTs9OlHe0ELnTwSxUp217X+dTi85xA5Je4q54D71dt9iW/tegJcdNu4pofv+pT8nFk18msoBetacjWMAVw==}
-    dependencies:
-      '@polkadot/api': 10.13.1
-      '@polkadot/types': 10.13.1
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: false
-
   /@futureverse/signer-core@0.3.0:
     resolution: {integrity: sha512-vtJ8kiUKWmny2x5T70zioFe4wlTUoIn803TY9sRPEbOAaNIl2y8Iwb/gCZqcnT8Yza890p5nnIRSPFTR7wg62A==}
     dependencies:
@@ -3630,99 +3620,6 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: false
-
-  /@futureverse/signer@1.3.0(typescript@5.9.3):
-    resolution: {integrity: sha512-u/YTyhaI/1/BMYtiNHiTwsnYVZYqN9l1kGPey45gjsWH1uYqSmqhpRdFgR0xMyIC/99SqZSwbXWFmocGRrKS0w==}
-    dependencies:
-      '@polkadot/api': 10.13.1
-      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2)(@polkadot/util@12.6.2)
-      '@polkadot/types': 10.13.1
-      '@polkadot/util': 12.6.2
-      '@polkadot/util-crypto': 12.6.2(@polkadot/util@12.6.2)
-      blakejs: 1.2.1
-      ripple-binary-codec: 2.6.0
-      ripple-keypairs: 2.0.0
-      viem: 2.45.1(typescript@5.9.3)
-      xrpl: 4.5.0
-      xumm: 1.8.0
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@futureverse/signer@1.5.0(typescript@5.9.3):
-    resolution: {integrity: sha512-+n1cd5+RConm6KiH8clR9KIesHvrYN620m7r0caoHKP07iaJ9RUua71KE5pzbePRHEnWA6dqQNf5YWYU4qjOag==}
-    dependencies:
-      '@polkadot/api': 10.13.1
-      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2)(@polkadot/util@12.6.2)
-      '@polkadot/types': 10.13.1
-      '@polkadot/util': 12.6.2
-      '@polkadot/util-crypto': 12.6.2(@polkadot/util@12.6.2)
-      blakejs: 1.2.1
-      ripple-binary-codec: 2.6.0
-      ripple-keypairs: 2.0.0
-      viem: 2.45.1(typescript@5.9.3)
-      xrpl: 4.5.0
-      xumm: 1.8.0
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@futureverse/signer@1.5.0(typescript@5.9.3)(zod@3.25.76):
-    resolution: {integrity: sha512-+n1cd5+RConm6KiH8clR9KIesHvrYN620m7r0caoHKP07iaJ9RUua71KE5pzbePRHEnWA6dqQNf5YWYU4qjOag==}
-    dependencies:
-      '@polkadot/api': 10.13.1
-      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2)(@polkadot/util@12.6.2)
-      '@polkadot/types': 10.13.1
-      '@polkadot/util': 12.6.2
-      '@polkadot/util-crypto': 12.6.2(@polkadot/util@12.6.2)
-      blakejs: 1.2.1
-      ripple-binary-codec: 2.6.0
-      ripple-keypairs: 2.0.0
-      viem: 2.45.1(typescript@5.9.3)(zod@3.25.76)
-      xrpl: 4.5.0
-      xumm: 1.8.0
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@futureverse/signer@1.6.1(typescript@5.9.3):
-    resolution: {integrity: sha512-lzh4O4cOvvjQ77JB2xBHX8EiqGixiuRQoDCEM0S1Hy0hyf06uzewPyV7B11meiL7H+3WEwRfymfsnYDH7/f/HA==}
-    dependencies:
-      '@futureverse/signer-core': 0.1.1
-      '@polkadot/api': 10.13.1
-      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2)(@polkadot/util@12.6.2)
-      '@polkadot/types': 10.13.1
-      '@polkadot/util': 12.6.2
-      '@polkadot/util-crypto': 12.6.2(@polkadot/util@12.6.2)
-      blakejs: 1.2.1
-      ripple-binary-codec: 2.6.0
-      ripple-keypairs: 2.0.0
-      viem: 2.45.1(typescript@5.9.3)
-      xrpl: 4.5.0
-      xumm: 1.8.0
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
     dev: false
 
   /@futureverse/signer@1.8.0(typescript@5.9.3):
@@ -3784,7 +3681,7 @@ packages:
       react: '>=18'
       viem: 2.x
     dependencies:
-      '@futureverse/signer': 1.3.0(typescript@5.9.3)
+      '@futureverse/signer': 1.8.0(typescript@5.9.3)
       '@futureverse/transact': 0.7.2(typescript@5.9.3)
       '@polkadot/api': 10.13.1
       '@polkadot/types': 10.13.1
@@ -3807,7 +3704,7 @@ packages:
   /@futureverse/transact@0.5.1(typescript@5.9.3):
     resolution: {integrity: sha512-CZ4olqB5wYLJGXowSVK/W7xjykH/afzQh5qKM1otKH1sBh7eBaXENSfNeAspyTfFaYHPvjvc+9JQDYz52VVtag==}
     dependencies:
-      '@futureverse/signer': 1.5.0(typescript@5.9.3)
+      '@futureverse/signer': 1.8.0(typescript@5.9.3)
       '@polkadot/api': 10.13.1
       '@polkadot/types': 10.13.1
       '@polkadot/util': 12.6.2
@@ -3826,7 +3723,7 @@ packages:
   /@futureverse/transact@0.5.3(typescript@5.9.3):
     resolution: {integrity: sha512-vZ/BOypgjvJMwACh0Y1T5hUT584nKx8zrvcxKuPJEqgTJeLdLQfk5Ph8bcWZb6MrZyCZ3RX/hKb62EfVouxJxg==}
     dependencies:
-      '@futureverse/signer': 1.6.1(typescript@5.9.3)
+      '@futureverse/signer': 1.8.0(typescript@5.9.3)
       '@polkadot/api': 10.13.1
       '@polkadot/types': 10.13.1
       '@polkadot/util': 12.6.2
@@ -3869,7 +3766,7 @@ packages:
       viem: 2.x
     dependencies:
       '@futureverse/auth': 3.4.0(typescript@5.9.3)(viem@2.45.1)
-      '@futureverse/signer': 1.5.0(typescript@5.9.3)
+      '@futureverse/signer': 1.8.0(typescript@5.9.3)
       '@futureverse/transact': 0.5.1(typescript@5.9.3)
       '@polkadot/api': 10.13.1
       '@therootnetwork/api': 1.1.0(@polkadot/api@10.13.1)

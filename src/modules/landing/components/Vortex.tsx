@@ -46,9 +46,9 @@ const Vortex = () => {
   });
 
   const vortexData = useMemo(() => {
-    if (rankingData?.response) {
+    if (rankingData && rankingData.response) {
       const vortexList = DefaultVortexList.map((vortex) => {
-        const gecko = rankingData.response.find((d: any) => {
+        const gecko = rankingData?.response.find((d: any) => {
           const key = d?.[0];
           if (vortex.token.toLowerCase() === key.toLowerCase()) {
             return true;

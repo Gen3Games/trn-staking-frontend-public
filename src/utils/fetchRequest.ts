@@ -30,7 +30,7 @@ export const fetchRequest = async (input: RequestInfo, init?: RequestInit) => {
 export const PAGE_SIZE = 10;
 
 export const fetchVortexRanking = async () => {
-  return 1;
+  return { response: [], error: null };
   // return fetchRequest(`${appConfig().geckoApiUrl}/ranking`);
 };
 
