@@ -86,8 +86,9 @@ const StakeProvider: FC<PropsWithChildren> = ({ children }) => {
           const unscaledValue = Number(unscaleBy(minNominatorBondBN, DECIMALS).join(''));
           // only show the floating value if the decimal part is more than 0
           const displayAmount = unscaledValue % 1 > 0 ? unscaledValue : Math.trunc(unscaledValue);
-          errorFields[StakeErrorFields.AMOUNT] =
-            `To unstake all ROOT, first remove any node nominations, as nominating requires at least ${displayAmount} ROOT staked`;
+          errorFields[
+            StakeErrorFields.AMOUNT
+          ] = `To unstake all ROOT, first remove any node nominations, as nominating requires at least ${displayAmount} ROOT staked`;
         }
       }
       return errorFields;
