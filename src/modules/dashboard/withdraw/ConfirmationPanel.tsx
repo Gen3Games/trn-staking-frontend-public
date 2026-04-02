@@ -17,7 +17,8 @@ interface IProps {
 
 const ConfirmationPanel = ({ onFinish }: IProps) => {
   const { setWithdrawStage, gasToken, isGasSufficient } = useDeposit();
-  const { encodedMessage, convertGasFeeToString } = useRootTransaction();
+  const { encodedMessage, gasFee, gasConversionStatus, convertGasFeeToString } =
+    useRootTransaction();
   const { data: futurePassAddress } = useFuturePassAccountAddress();
   const { remove, amount } = useStakePosition();
 
@@ -41,7 +42,13 @@ const ConfirmationPanel = ({ onFinish }: IProps) => {
             <Button
               variant="contained"
               onClick={handleConfirm}
-              disabled={!encodedMessage || !isGasSufficient || Number(amount) <= 0}
+              disabled={
+                !encodedMessage ||
+                !isGasSufficient ||
+                Number(amount) <= 0 ||
+                gasConversionStatus !== 'success' ||
+                gasFee === null
+              }
             >
               Continue
             </Button>
@@ -94,7 +101,9 @@ const ConfirmationPanel = ({ onFinish }: IProps) => {
               Estimated gas fee
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ overflowX: 'auto' }}>
-              {convertGasFeeToString}
+              {gasConversionStatus === 'loading' && 'Loading gas fee...'}
+              {gasConversionStatus === 'success' && convertGasFeeToString}
+              {gasConversionStatus === 'failed' && 'Failed to convert gas fee'}
             </Typography>
             {!isGasSufficient && (
               <Typography variant="body1" color="error">

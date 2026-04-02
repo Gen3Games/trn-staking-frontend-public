@@ -19,7 +19,7 @@ import { unscaleBy } from 'utils/polkadotBN';
 import { WithdrawStage } from '../type';
 
 const WithdrawAmountPanel: FC = () => {
-  const { amount, handleAmount, clearError, error, confirmToRemove } = useStakePosition();
+  const { amount, handleAmount, clearError, error, txError, confirmToRemove } = useStakePosition();
   const { setWithdrawStage, handleGetGasToken } = useDeposit();
   const ledger = useLedger();
   const { assets, selectedAsset } = useAssets();
@@ -45,11 +45,13 @@ const WithdrawAmountPanel: FC = () => {
 
   const handleConfirm = useCallback(
     async (e: { target: { value: string } }) => {
-      await confirmToRemove();
-      if (error.amount) return;
+      const isPrepared = await confirmToRemove();
+
+      if (!isPrepared) return;
+
       setWithdrawStage(WithdrawStage.CONFIRMATION);
     },
-    [confirmToRemove, error?.amount, setWithdrawStage]
+    [confirmToRemove, setWithdrawStage]
   );
 
   return (
@@ -127,6 +129,11 @@ const WithdrawAmountPanel: FC = () => {
             helperText={error.amount}
             fullWidth
           />
+          {txError && (
+            <Typography variant="body1" color="error">
+              {txError}
+            </Typography>
+          )}
           <Box display="flex" py={1} width={{ xs: '100%', lg: '40%' }}>
             <Typography variant="body1" fontWeight={700} sx={{ textTransform: 'uppercase' }}>
               GAS PAYMENT

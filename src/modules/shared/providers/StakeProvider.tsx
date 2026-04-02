@@ -32,7 +32,7 @@ interface IProps {
   clearAllError: () => void;
   clearStatus: (restart?: boolean) => void;
   remove: () => Promise<boolean>;
-  confirmToRemove: () => Promise<void>;
+  confirmToRemove: () => Promise<boolean>;
   reset: () => void;
 }
 
@@ -86,9 +86,8 @@ const StakeProvider: FC<PropsWithChildren> = ({ children }) => {
           const unscaledValue = Number(unscaleBy(minNominatorBondBN, DECIMALS).join(''));
           // only show the floating value if the decimal part is more than 0
           const displayAmount = unscaledValue % 1 > 0 ? unscaledValue : Math.trunc(unscaledValue);
-          errorFields[
-            StakeErrorFields.AMOUNT
-          ] = `To unstake all ROOT, first remove any node nominations, as nominating requires at least ${displayAmount} ROOT staked`;
+          errorFields[StakeErrorFields.AMOUNT] =
+            `To unstake all ROOT, first remove any node nominations, as nominating requires at least ${displayAmount} ROOT staked`;
         }
       }
       return errorFields;
@@ -101,9 +100,10 @@ const StakeProvider: FC<PropsWithChildren> = ({ children }) => {
     const errorFields = await validateRemove(amount);
     if (!isEmpty(errorFields)) {
       setError(errorFields);
-      return;
+      return false;
     }
-    await confirmToUnbond(Number(amount));
+
+    return confirmToUnbond(Number(amount));
   }, [amount, confirmToUnbond, validateRemove]);
 
   const remove = useCallback(async () => {

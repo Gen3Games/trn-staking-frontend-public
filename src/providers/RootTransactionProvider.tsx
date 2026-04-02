@@ -57,7 +57,7 @@ export interface TransactionContextType {
   handleBond: (amount: number) => Promise<void>;
   confirmToBondMore: (amount: number) => Promise<void>;
   handleBondMore: (amount: number) => Promise<void>;
-  confirmToUnbond: (amount: number) => Promise<void>;
+  confirmToUnbond: (amount: number) => Promise<boolean>;
   handleUnbond: (amount: number) => Promise<void>;
   confirmToNominate: (targets: string[]) => Promise<void>;
   handleNominate: (targets: string[]) => Promise<void>;
@@ -423,18 +423,30 @@ const RootTransactionInnerProvider: FC<
 
   const confirmToUnbond = useCallback(
     async (amount: number) => {
+      setError(null);
+
       if (validatePreTransaction() && amount > 0 && futurePassAddress && trnApi) {
         const amountBn = scaleBy(amount, DECIMALS);
+
         try {
           const extrinsic = trnApi.tx.staking.unbond(amountBn.toString());
+          const builder = await buildExtrinsic(extrinsic);
 
-          setUnbondBuilder(await buildExtrinsic(extrinsic));
+          if (!builder) {
+            return false;
+          }
+
+          setUnbondBuilder(builder);
+          return true;
         } catch (error: any) {
           error?.message && setError(error?.message);
+          return false;
         }
       }
+
+      return false;
     },
-    [validatePreTransaction, buildExtrinsic, futurePassAddress, trnApi]
+    [validatePreTransaction, buildExtrinsic, futurePassAddress, trnApi, setError]
   );
 
   /**
