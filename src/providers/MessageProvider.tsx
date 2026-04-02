@@ -7,6 +7,7 @@ import { isString } from 'lodash';
 import { Typography } from '@futureverse/component-library';
 
 export enum MessageKey {
+  Transaction = 'transaction',
   Withdraw = 'withdraw',
   Bond = 'bond',
   BondMore = 'bond-more',

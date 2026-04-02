@@ -163,6 +163,19 @@ const RootTransactionInnerProvider: FC<
   );
   const [encodedMessage, setEncodedMessage] = useState<IEncodedMessage | undefined>();
 
+  const showTransactionError = useCallback(
+    (message: string) => {
+      setError(message);
+      addMessage({
+        key: MessageKey.Transaction,
+        type: MessageType.Error,
+        title: 'Transaction failed',
+        message,
+      });
+    },
+    [addMessage]
+  );
+
   const clearStatus = (restart = false) => {
     setStatus(restart ? TransactionStatus.START : TransactionStatus.NONE);
   };
@@ -200,29 +213,39 @@ const RootTransactionInnerProvider: FC<
     ): Promise<CalcResult | undefined> => {
       setGasConversionStatus('loading');
       if (validatePreTransaction() && trnApi) {
-        const extrinsic = await builder.getExtrinsicToSend();
-        if (!extrinsic) {
+        try {
+          const extrinsic = await builder.getExtrinsicToSend();
+          if (!extrinsic) {
+            setGasConversionStatus('failed');
+            showTransactionError(
+              'Unable to prepare the FuturePass transaction for gas estimation. Please try again.'
+            );
+            return undefined;
+          }
+
+          const { gasFee } = await builder.getGasFees();
+
+          // check balance
+          const balance = gasTokenBalances.find(
+            (balance) => balance.assetId === gasToken.assetId
+          )?.balance;
+
+          setGasConversionStatus('success');
+
+          return {
+            isGasSufficient: balance?.gt(new BN(gasFee)) ?? false,
+            gasFeeActual: new BN(gasFee) ?? BN_ZERO,
+          };
+        } catch (error: any) {
+          setGasConversionStatus('failed');
+          showTransactionError(error?.message || 'Failed to estimate gas fee. Please try again.');
           return undefined;
         }
-
-        const { gasFee } = await builder.getGasFees();
-
-        // check balance
-        const balance = gasTokenBalances.find(
-          (balance) => balance.assetId === gasToken.assetId
-        )?.balance;
-
-        setGasConversionStatus('success');
-
-        return {
-          isGasSufficient: balance?.gt(new BN(gasFee)) ?? false,
-          gasFeeActual: new BN(gasFee) ?? BN_ZERO,
-        };
       } else {
         setGasConversionStatus('failed');
       }
     },
-    [trnApi, gasTokenBalances, validatePreTransaction]
+    [trnApi, gasTokenBalances, showTransactionError, validatePreTransaction]
   );
 
   const getExplorerLink = useCallback((txInfo?: IExtrinsicInfo) => {
@@ -240,7 +263,29 @@ const RootTransactionInnerProvider: FC<
 
   const buildExtrinsic = useCallback(
     async (extrinsic: SubmittableExtrinsic<'promise', ISubmittableResult>) => {
-      if (!trnApi || !signer || !userSession || !futurePassAddress) {
+      if (!trnApi) {
+        showTransactionError('Unable to prepare the transaction because the network is not ready.');
+        return null;
+      }
+
+      if (!signer) {
+        showTransactionError(
+          'Unable to prepare the transaction because the wallet signer is unavailable.'
+        );
+        return null;
+      }
+
+      if (!userSession?.eoa) {
+        showTransactionError(
+          'Unable to prepare the transaction because the wallet session is unavailable.'
+        );
+        return null;
+      }
+
+      if (!futurePassAddress) {
+        showTransactionError(
+          'Unable to prepare the transaction because your FuturePass is not ready yet.'
+        );
         return null;
       }
 
@@ -272,7 +317,7 @@ const RootTransactionInnerProvider: FC<
       setEncodedMessage({ encodedMessage, rawMessage });
 
       if (!calcResult) {
-        throw new Error('Failed to calculate gas fee');
+        return null;
       }
 
       const { gasFeeActual } = calcResult;
@@ -290,6 +335,7 @@ const RootTransactionInnerProvider: FC<
       gasToken,
       futurePassAddress,
       calculateGasFee,
+      showTransactionError,
       setGasFee,
       setIsGasSufficient,
       setCurrentExtrinsic,
@@ -425,6 +471,16 @@ const RootTransactionInnerProvider: FC<
     async (amount: number) => {
       setError(null);
 
+      if (!trnApi) {
+        showTransactionError('Unable to prepare unstake because the network is not ready yet.');
+        return false;
+      }
+
+      if (!futurePassAddress) {
+        showTransactionError('Unable to prepare unstake because your FuturePass is not ready yet.');
+        return false;
+      }
+
       if (validatePreTransaction() && amount > 0 && futurePassAddress && trnApi) {
         const amountBn = scaleBy(amount, DECIMALS);
 
@@ -439,14 +495,23 @@ const RootTransactionInnerProvider: FC<
           setUnbondBuilder(builder);
           return true;
         } catch (error: any) {
-          error?.message && setError(error?.message);
+          showTransactionError(
+            error?.message || 'Unable to prepare the unstake transaction. Please try again.'
+          );
           return false;
         }
       }
 
       return false;
     },
-    [validatePreTransaction, buildExtrinsic, futurePassAddress, trnApi, setError]
+    [
+      validatePreTransaction,
+      buildExtrinsic,
+      futurePassAddress,
+      trnApi,
+      setError,
+      showTransactionError,
+    ]
   );
 
   /**
